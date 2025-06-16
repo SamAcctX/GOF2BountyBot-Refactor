@@ -10,7 +10,8 @@ import sys
 # Require below python 3.12 because:
 # - The json serializable models implementation looks explicitly for a typing.Generic base class, it does not yet support class type parameter syntax
 MIN_PYTHON = (3, 7)
-MAX_PYTHON = (3, 11)
+# Hack fix - add "999" to 3.11 micro version so that 3.11 updates don't fail the check...
+MAX_PYTHON = (3, 11, 999)
 if sys.version_info < MIN_PYTHON:
     sys.exit("Python %s.%s or later is required.\n" % MIN_PYTHON)
 

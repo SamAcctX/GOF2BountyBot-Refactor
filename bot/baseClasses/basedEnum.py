@@ -41,3 +41,6 @@ class BasedEnumMeta(_EnumMetaBase):
         :rtype: Optional[TSelf]
         """
         return cls[name] if name in cls else None
+
+class BasedEnum(Enum, metaclass=BasedEnumMeta):
+    pass

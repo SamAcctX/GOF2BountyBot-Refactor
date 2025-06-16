@@ -46,30 +46,36 @@ RUN apt-get update && \
         curl \
         git \
         python3-pip \
-        python3.10-dev \
-        python3.10-venv \
-        libpython3.10-dev \
+        python3.11-dev \
+        python3.11-venv \
+        libpython3.11-dev \
         openssl \
         # Extras for bountybot
         postgresql-client \
         blender \
         g++-14 \
-        gcc-14 && \
+        gcc-14 \
+        # Temp install vim and sudo for debugging...
+        vim \
+        sudo \
+        # 7zip for extraction of assets on container startup...
+        7zip && \
     apt-get autoremove -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 1
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
 RUN update-alternatives --config python3
 RUN ln -s /usr/bin/python3 /usr/bin/python
 
 # Create a virtual environment
-RUN python3.10 -m venv /opt/venv
+RUN python3.11 -m venv /opt/venv
 
 WORKDIR /app/bountybot
 
-# Copy requirements file
+# Copy requirements files
 COPY requirements.txt .
+COPY bot/lib/AEPi/requirements.txt ./aepi.requirements.txt
 
 # Activate the virtual environment and upgrade pip
 RUN chmod +x /opt/venv/bin/activate && \
@@ -79,16 +85,29 @@ RUN chmod +x /opt/venv/bin/activate && \
         wheel  \
         ninja \
         meson
-        
+    
 # Install dependencies
-RUN /opt/venv/bin/pip install --upgrade --no-cache-dir --prefer-binary -r requirements.txt
+RUN /opt/venv/bin/pip install --upgrade --no-cache-dir --prefer-binary \
+    -r requirements.txt \
+    -r aepi.requirements.txt
+
+# Install gdown for pulling assets from Google Drive
+RUN /opt/venv/bin/pip install --upgrade --no-cache-dir --prefer-binary \
+    gdown
+    
+# mainly for debugging - catalog all pip packages and versions
+RUN /opt/venv/bin/pip freeze
 
 # Copy remaining app code...
 COPY . .
 
-# create a non-root user
+# create a non-root user and update permissions...
 RUN groupadd --gid 1002 botuser && \
     useradd --uid 1001 --gid botuser --shell /bin/bash --create-home botuser && \
+    # sudo stuff - nuke eventually once stable to prevent non-priv user from being able to elevate...
+    usermod -aG sudo botuser && \
+    echo "botuser:botuser" | chpasswd && \
+    echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
     chown -R botuser /home/botuser && \
     chown -R botuser /app/bountybot && \
     chmod -R 1777 /home/botuser && \
@@ -98,4 +117,6 @@ USER botuser
 
 # The ' & tail -f /dev/null' in the entrypoint below is a hack to keep the container running if the app crashes.
 # This can be handy for being able to connect to the container CLI and check files/logs since it will still be running.
-ENTRYPOINT ["/bin/bash", "-c", "source /opt/venv/bin/activate && /opt/venv/bin/python main.py ${CONFIG_FILE} & tail -f /dev/null"]
+# ENTRYPOINT ["/bin/bash", "-c", "source /opt/venv/bin/activate && /opt/venv/bin/python main.py ${CONFIG_FILE} & tail -f /dev/null"]
+# ENTRYPOINT ["/bin/bash", "-c", "source /opt/venv/bin/activate && /opt/venv/bin/python main.py ${CONFIG_FILE} & tail -f /dev/null"]
+ENTRYPOINT ["/bin/bash", "-c", "source /opt/venv/bin/activate && /app/bountybot/docker-entrypoint.sh & tail -f /dev/null"]
