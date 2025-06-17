@@ -47,6 +47,7 @@ class AliasableMixin(Base, EmbedFillableMixin, SerializesToSchema[TSchema], meta
     :var aliases: A list of alternative identifiers for the object
     :vartype aliases: list[str]
     """
+    __abstract__ = True
     __tablename__ = TableNames.ObjectAliases.value
     
     name: Mapped[str]

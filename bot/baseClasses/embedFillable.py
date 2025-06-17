@@ -1076,6 +1076,7 @@ class EmbedFillableMixin(metaclass=_EmbedFillableMeta):
     your class's other metaclass, and a copy of this class that uses the new metaclass:
     `The metaclass of a derived class must be a subclass of the metaclasses of all its base classes`
     """
+    __abstract__ = True
     _embedAttributes: List[_BaseEmbedAttribute] = []
     _embedFields: Dict[str, List[_BaseEmbedField]] = {}
     _embedColour: Optional[_BaseEmbedColour] = None

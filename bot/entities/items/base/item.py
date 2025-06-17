@@ -30,6 +30,7 @@ class AnyItem(ItemDeclarativeBase):
     - item category (StoreableItemType)
     - concrete class identifier
     """
+    __abstract__ = True
     __tablename__ = TableNames.AllItems.value
 
     _isStoreableBase = True
