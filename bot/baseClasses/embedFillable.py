@@ -64,7 +64,6 @@ class _BaseEmbedAttribute(ABC, Generic[TAnyEmbedAttributeUnderlyingMethod, TRetu
     The `TAnyEmbedAttributeUnderlyingMethod` generic type parameter is the type of the underlying method
     The `TReturnValue` generic type parameter is the return type of `TAnyEmbedAttributeUnderlyingMethod`
     """
-    from ..lib.discordUtil import ZWSP, ImageFile
     def __init__(self, inner: TAnyEmbedAttributeUnderlyingMethod) -> None:
         self.inner = inner
 
@@ -242,8 +241,8 @@ class _BaseEmbedUrlThumbnail(_BaseEmbedAttribute[TAnyEmbedAttributeUnderlyingMet
 class _BaseEmbedFileThumbnail(_BaseEmbedFileAttribute[TAnyEmbedAttributeUnderlyingMethod, Optional[Union[str, Image.Image]]], Generic[TAnyEmbedAttributeUnderlyingMethod]):
     """An embed thumbnail setter, by reference to an image file. The underlying method must return `str` (the path to the file), `Image.Image` or `None`.
     """
-    from ..lib.discordUtil import ZWSP, ImageFile
     async def fillEmbed(self, ownerSelf, embed: Embed) -> Optional[ImageFile]:
+        from ..lib.discordUtil import ZWSP, ImageFile
         val = await self.getValue(ownerSelf)
         if not (f := imageOrPathValue(val, "autoFillEmbedThumbnail")):
             return None
@@ -289,8 +288,8 @@ class _BaseEmbedFileAuthor(_BaseEmbedFileAttribute[TAnyEmbedAttributeUnderlyingM
     """An embed author setter, setting the author icon by reference to a file.
     The underlying method must return `None`, or a tuple of (`str` (author name), `str` (path to the icon file) or `Image.Image` (icon), `str` (url)). Each tuple member is optional.
     """
-    from ..lib.discordUtil import ZWSP, ImageFile
     async def fillEmbed(self, ownerSelf, embed: Embed) -> Optional[ImageFile]:
+        from ..lib.discordUtil import ZWSP, ImageFile
         val = await self.getValue(ownerSelf)
         if val is None:
             embed.remove_author()
@@ -342,8 +341,8 @@ class _BaseEmbedFileFooter(_BaseEmbedFileAttribute[TAnyEmbedAttributeUnderlyingM
     """An embed author setter, setting the footer icon by file reference.
     The underlying method must return `None`, or a tuple of (`str` (footer text), `str` (path to the icon) or `Image.Image` (icon)). Each tuple member is optional.
     """
-    from ..lib.discordUtil import ZWSP, ImageFile
     async def fillEmbed(self, ownerSelf, embed: Embed) -> Optional[ImageFile]:
+        from ..lib.discordUtil import ZWSP, ImageFile
         val = await self.getValue(ownerSelf)
         if val is None:
             embed.remove_footer()
@@ -426,8 +425,8 @@ class _BaseEmbedFileImage(_BaseEmbedFileAttribute[TAnyEmbedAttributeUnderlyingMe
     """An embed main image setter, by file reference.
     The underlying method must return `str` (path to the file), `Image.Image` (the file) or `None`.
     """
-    from ..lib.discordUtil import ZWSP, ImageFile
     async def fillEmbed(self, ownerSelf, embed: Embed) -> Optional[ImageFile]:
+        from ..lib.discordUtil import ZWSP, ImageFile
         val = await self.getValue(ownerSelf)
         if not (f := imageOrPathValue(val, "autoFillEmbedImage")):
             return None
@@ -1073,7 +1072,6 @@ class EmbedFillableMixin(metaclass=_EmbedFillableMeta):
     your class's other metaclass, and a copy of this class that uses the new metaclass:
     `The metaclass of a derived class must be a subclass of the metaclasses of all its base classes`
     """
-    from ..lib.discordUtil import ZWSP, ImageFile
     _embedAttributes: List[_BaseEmbedAttribute] = []
     _embedFields: Dict[str, List[_BaseEmbedField]] = {}
     _embedColour: Optional[_BaseEmbedColour] = None
@@ -1130,6 +1128,7 @@ class EmbedFillableMixin(metaclass=_EmbedFillableMeta):
         the embed in order for any images to appear.
         Don't forget to call `.closeAll` on each of the `ImageFile`s, to avoid any memory leaks.
         """
+        from ..lib.discordUtil import ZWSP, ImageFile
         files: List[ImageFile] = []
         
         try:
