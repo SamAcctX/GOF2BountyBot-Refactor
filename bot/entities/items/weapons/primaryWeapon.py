@@ -1,6 +1,6 @@
 from ....cfg import bbData
 from ....lib.emojis import BasedEmoji
-from ....lib.gameMaths import topThreeItemSpawnRates
+
 from ....baseClasses.embedFillable import embedField
 from ..base.item_storeable import itemType
 from ....database.constants import StoreableItemType
@@ -34,4 +34,6 @@ class PrimaryWeapon(Weapon):
 
     
     @embedField("BB Shop Spawn Rate", hideWhenNone=True)
-    def formattedShopSpawnRate(self): return topThreeItemSpawnRates(self.techLevel, bbData.weaponObjsByTL)
+    def formattedShopSpawnRate(self): 
+        from ....lib.gameMaths import topThreeItemSpawnRates
+        return topThreeItemSpawnRates(self.techLevel, bbData.weaponObjsByTL)

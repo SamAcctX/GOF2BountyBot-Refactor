@@ -3,7 +3,6 @@ from typing import Any, Dict, Literal, TypeVar, cast
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .... import lib
-from ....lib.gameMaths import topThreeItemSpawnRates
 from ....lib.stringUtil import formattedAdditiveAndOrMultiplierOrNone, formatMultiplier, formatAdditive
 from ....baseClasses.embedFillable import embedField
 from ....cfg import bbData
@@ -71,7 +70,9 @@ class ModuleItem(Item[TSchema], Workshopable[TSchema]):
     def formattedHandling(self): return formattedAdditiveAndOrMultiplierOrNone(self.handling, self.handlingMultiplier)
     
     @embedField("BB Shop Spawn Rate", hideWhenNone=True)
-    def formattedShopSpawnRate(self): return topThreeItemSpawnRates(self.techLevel, bbData.moduleObjsByTL) # TODo
+    def formattedShopSpawnRate(self): 
+        from ....lib.gameMaths import topThreeItemSpawnRates
+        return topThreeItemSpawnRates(self.techLevel, bbData.moduleObjsByTL) # TODo
 
 #endregion
 

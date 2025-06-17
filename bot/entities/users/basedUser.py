@@ -10,7 +10,6 @@ from sqlalchemy.ext.hybrid import hybrid_property
 from ...baseClasses.serializable import SerializesToSchema
 from .basedUser_json import SerializedBasedUser
 from ...lib.sql import AbcSqlTableMeta
-from ...lib.gameMaths import calculateUserBountyHuntingLevel
 from ...database.tables import TableNames
 from ..userProfile.medal import Medal
 from ..inventories.userHangar import UserHangar
@@ -77,6 +76,7 @@ class BasedUser(Base, SerializesToSchema[SerializedBasedUser], metaclass=AbcSqlT
 
     @hybrid_property
     def bountyHuntingLevel(self):
+        from ...lib.gameMaths import calculateUserBountyHuntingLevel
         return 1 if self.classicModeEnabled else calculateUserBountyHuntingLevel(self.bountyHuntingXP)
 
 

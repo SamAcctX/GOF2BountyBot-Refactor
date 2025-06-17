@@ -16,7 +16,6 @@ from ...base.workshopable_json import AnySerializedWorkshopable
 from .shipSpec_json import SerializedShipSpec
 from ....database.constants import ShipSkinRegion
 from ....database.tables import TableNames
-from ....lib.gameMaths import topThreeItemSpawnRates
 
 TShip = TypeVar("TShip", bound="ShipSpec[Any]")
 TSchema = TypeVar("TSchema", bound=SerializedShipSpec)
@@ -146,7 +145,9 @@ class ShipSpec(Base, AliasableMixin[TSchema], Workshopable[TSchema], SqlNamedWik
     def formattedMaxModules(self): return self.maxModules
 
     @embedField("BB Shop Spawn Rate", hideWhenNone=True)
-    def formattedShopSpawnRate(self): return topThreeItemSpawnRates(self.techLevel, bbData.shipKeysByTL) # TODO
+    def formattedShopSpawnRate(self): 
+        from ....lib.gameMaths import topThreeItemSpawnRates
+        return topThreeItemSpawnRates(self.techLevel, bbData.shipKeysByTL) # TODO
     
     @embedField("Compatible Skins", showInline=False)
     async def compatibleSkinsStr(self):

@@ -1,7 +1,7 @@
 from ....cfg import bbData
 from ....baseClasses.embedFillable import embedField
 from ....lib.emojis import BasedEmoji
-from ....lib.gameMaths import topThreeItemSpawnRates
+
 from ....database.constants import StoreableItemType
 from ..base.item_storeable import itemType
 from ..base.item_spawnable import spawnableItem
@@ -34,4 +34,6 @@ class TurretWeapon(Weapon):
 
     
     @embedField("BB Shop Spawn Rate", hideWhenNone=True)
-    def formattedShopSpawnRate(self): return topThreeItemSpawnRates(self.techLevel, bbData.turretObjsByTL)
+    def formattedShopSpawnRate(self): 
+        from ....lib.gameMaths import topThreeItemSpawnRates
+        return topThreeItemSpawnRates(self.techLevel, bbData.turretObjsByTL)

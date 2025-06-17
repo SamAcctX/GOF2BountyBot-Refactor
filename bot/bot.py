@@ -585,7 +585,7 @@ async def runAsync():
 
     if cfg.botToken_envVarName and cfg.botToken_envVarName not in os.environ:
         raise KeyError("Bot token environment variable " + cfg.botToken_envVarName + " not set (cfg.botToken_envVarName")
-
+    print("Starting bot...")
     async with botState.client:
         await loadExtensions()
         # Launch bot

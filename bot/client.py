@@ -623,11 +623,13 @@ class BasedClient(ClientBaseClass):
     
     async def _asyncInit(self, dispatchReady: bool = True, *args, **kwargs):
         if not self._mediaServersLoaded:
+            print("Media server not loaded, loading...")
             mediaServer = self.get_guild(cfg.mediaServer)
             if mediaServer is None:
                 raise ValueError(f"Unknown guild ID for cfg.mediaServer: {cfg.mediaServer}")
 
             skinsChannel = mediaServer.get_channel(cfg.skinRendersChannel)
+            print("skins render channel", print("skins render channel", b, sep=": "), sep=": ")
             if skinsChannel is None:
                 raise ValueError(f"Unknown channel ID for cfg.skinRendersChannel: {cfg.skinRendersChannel}")
             if not isinstance(skinsChannel, TextChannel):
@@ -635,6 +637,7 @@ class BasedClient(ClientBaseClass):
             self._skinStorageChannel = skinsChannel
 
             rendersChannel = mediaServer.get_channel(cfg.showmeSkinRendersChannel)
+            print("render channel", rendersChannel, sep=": ")
             if rendersChannel is None:
                 raise ValueError(f"Unknown channel ID for cfg.showmeSkinRendersChannel: {cfg.showmeSkinRendersChannel}")
             if not isinstance(rendersChannel, TextChannel):
@@ -656,8 +659,9 @@ class BasedClient(ClientBaseClass):
             self._githubLoaded = True
 
         # Create missing directories
+        print("Creating missing dirs...")
         cfg.paths.createMissingDirectories()
-
+        print("Loading game objects...")
         gameConfigurator.loadAllGameObjectData()
         gameConfigurator.loadAllGameObjects()
 
