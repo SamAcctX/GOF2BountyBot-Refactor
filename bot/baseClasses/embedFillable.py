@@ -1,8 +1,12 @@
-from typing import Any, Awaitable, Dict, Generic, List, Optional, Protocol, Set, Tuple, Type, TypeVar, Union, cast
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, Awaitable, Dict, Generic, List, Optional, Protocol, Set, Tuple, Type, TypeVar, Union, cast
 from abc import ABC, ABCMeta, abstractmethod
 from inspect import signature, _empty # type: ignore[reportPrivateUsage]
 from PIL import Image
 # from ..lib.discordUtil import ZWSP, ImageFile
+if TYPE_CHECKING:                         # pragma: no cover
+    from ..lib.discordUtil import ZWSP, ImageFile  # adjust the relative path if necessary
 from ..lib.asyncUtil import Parallel
 
 from discord import Colour, Embed

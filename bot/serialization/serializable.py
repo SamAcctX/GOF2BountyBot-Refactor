@@ -196,6 +196,7 @@ class _SerializableMetaBase(ABC, type):
                             + "Make sure that your child class defines a new value for _jsonSchema.")
         
         if not isInheritedSchema:
+            print(f"Schema: {schema}")
             schema._ownerClass = type(o) # type: ignore[reportPrivateUsage]
             for field in schema._currentClassFields: # type: ignore[reportPrivateUsage]
                 field.ownerClass = type(o)
